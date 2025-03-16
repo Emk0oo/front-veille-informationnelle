@@ -1,4 +1,4 @@
-<body class="bg-slate-50 text-slate-800">
+<div class="bg-slate-50 text-slate-800">
   <!-- Header Section -->
   <header class="bg-primary shadow-md">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,29 +26,29 @@
         <!-- Desktop Navigation -->
         <nav class="hidden md:flex items-center space-x-6">
           <a
-            href="#features"
-            class="text-gray-300 hover:text-white transition-colors duration-200"
-            >Features</a
+            (click)="scrollToElement('features')"
+            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+            >Fonctionnalités</a
           >
           <a
-            href="#statistics"
-            class="text-gray-300 hover:text-white transition-colors duration-200"
-            >Statistics</a
+            (click)="scrollToElement('statistics')"
+            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+            >Statistiques</a
           >
           <a
-            href="#news"
-            class="text-gray-300 hover:text-white transition-colors duration-200"
-            >News & Analysis</a
+            (click)="scrollToElement('news')"
+            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+            >Actualités et analyse</a
           >
           <a
-            href="#contact"
-            class="text-gray-300 hover:text-white transition-colors duration-200"
+            (click)="scrollToElement('contact')"
+            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
             >Contact</a
           >
           <button
             class="bg-accent hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
           >
-            Try Demo
+            Se connecter
           </button>
         </nav>
 
@@ -77,29 +77,29 @@
       <div id="mobile-menu" class="md:hidden hidden pb-4">
         <div class="flex flex-col space-y-3">
           <a
-            href="#features"
-            class="text-gray-300 hover:text-white transition-colors duration-200"
-            >Features</a
+            (click)="scrollToElement('features')"
+            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+            >Fonctionnalités</a
           >
           <a
-            href="#statistics"
-            class="text-gray-300 hover:text-white transition-colors duration-200"
-            >Statistics</a
+            (click)="scrollToElement('statistics')"
+            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+            >Statistiques</a
           >
           <a
-            href="#news"
-            class="text-gray-300 hover:text-white transition-colors duration-200"
-            >News & Analysis</a
+            (click)="scrollToElement('news')"
+            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+            >Actualités et analyse</a
           >
           <a
-            href="#contact"
-            class="text-gray-300 hover:text-white transition-colors duration-200"
+            (click)="scrollToElement('contact')"
+            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
             >Contact</a
           >
           <button
-            class="bg-accent hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 w-full"
+            class="bg-accent hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
           >
-            Try Demo
+            Se connecter
           </button>
         </div>
       </div>
@@ -112,11 +112,12 @@
       <div class="flex flex-col md:flex-row items-center">
         <div class="md:w-1/2 mb-8 md:mb-0">
           <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            Global Geopolitical Intelligence Dashboard
+            Tableau de bord de veille géopolitique
           </h1>
           <p class="text-lg text-gray-300 mb-6">
-            Stay ahead of global events with real-time geopolitical monitoring,
-            analytics, and strategic insights for informed decision-making.
+            Accédez à des données en temps réel, à des analyses avancées et à
+            des informations d'experts, le tout dans un tableau de bord
+            intuitif.
           </p>
           <div
             class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4"
@@ -124,12 +125,13 @@
             <button
               class="bg-accent hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-md transition-colors duration-200"
             >
-              Start Free Trial
+              Créer votre dashboard
             </button>
             <button
+              (click)="scrollToElement('news')"
               class="bg-transparent hover:bg-white/10 border border-white text-white font-medium py-3 px-6 rounded-md transition-colors duration-200"
             >
-              Schedule Demo
+              Voir les dernières actualités
             </button>
           </div>
         </div>
@@ -148,9 +150,9 @@
             <div class="p-4 bg-slate-900 rounded-b-lg">
               <div class="flex justify-between mb-4">
                 <div class="text-xs font-medium text-gray-400">
-                  GLOBAL RISK INDEX
+                    NIVEAU DE RISQUE
                 </div>
-                <div class="text-xs font-medium text-orange-400">ELEVATED</div>
+                <div class="text-xs font-medium text-orange-400">ÉLEVÉE</div>
               </div>
               <div class="w-full bg-slate-700 rounded-full h-2.5 mb-6">
                 <div
@@ -160,12 +162,12 @@
               </div>
               <div class="grid grid-cols-2 gap-3 mb-4">
                 <div class="bg-slate-800 p-3 rounded-lg">
-                  <div class="text-xs text-gray-400 mb-1">Active Conflicts</div>
+                  <div class="text-xs text-gray-400 mb-1">Conflits actifs</div>
                   <div class="text-lg font-semibold">27</div>
                 </div>
                 <div class="bg-slate-800 p-3 rounded-lg">
                   <div class="text-xs text-gray-400 mb-1">
-                    Monitored Regions
+                    Régions surveillées
                   </div>
                   <div class="text-lg font-semibold">142</div>
                 </div>
@@ -178,15 +180,15 @@
                   <div class="text-lg font-semibold">12</div>
                 </div>
               </div>
-              <div class="text-xs text-gray-400 mb-2">TRENDING ALERTS</div>
+              <div class="text-xs text-gray-400 mb-2">DERNIERES ALERTES </div>
               <div class="space-y-2">
                 <div class="bg-slate-800 p-2 rounded flex items-center">
                   <div class="w-2 h-2 rounded-full bg-red-500 mr-2"></div>
-                  <span class="text-xs">Mediterranean tensions escalate</span>
+                  <span class="text-xs">Guerre en Ukraine : débacle à Koursk</span>
                 </div>
                 <div class="bg-slate-800 p-2 rounded flex items-center">
                   <div class="w-2 h-2 rounded-full bg-yellow-500 mr-2"></div>
-                  <span class="text-xs">Currency crisis in Southeast Asia</span>
+                  <span class="text-xs">Serbie : manifestation massive contre le pouvoir</span>
                 </div>
               </div>
             </div>
@@ -204,8 +206,7 @@
           Comprehensive Geopolitical Intelligence
         </h2>
         <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-          Access real-time data, advanced analytics, and expert insights all in
-          one intuitive dashboard.
+          Accédez à des données en temps réel et à des à des analyses avancées le tout dans un tableau de bord intuitif.
         </p>
       </div>
 
@@ -230,10 +231,10 @@
               />
             </svg>
           </div>
-          <h3 class="text-xl font-semibold mb-2">Risk Assessment</h3>
+          <h3 class="text-xl font-semibold mb-2">Evaluateur de risque expérimental</h3>
           <p class="text-gray-600">
-            Evaluate geopolitical risks with our proprietary risk indicators and
-            predictive models.
+            Évaluez les risques géopolitiques et les opportunités commerciales
+            avec des données en temps réel.
           </p>
         </div>
 
@@ -257,10 +258,12 @@
               />
             </svg>
           </div>
-          <h3 class="text-xl font-semibold mb-2">Data Visualization</h3>
+          <h3 class="text-xl font-semibold mb-2">
+            Visualisation de données
+          </h3>
           <p class="text-gray-600">
-            Interactive maps, charts, and graphs that make complex geopolitical
-            trends easy to understand.
+            Tableaux et graphiques pour une analyse des
+            tendances et des risques.
           </p>
         </div>
 
@@ -284,10 +287,10 @@
               />
             </svg>
           </div>
-          <h3 class="text-xl font-semibold mb-2">Real-time Alerts</h3>
+          <h3 class="text-xl font-semibold mb-2">Mise à jour des alertes régulières</h3>
           <p class="text-gray-600">
-            Immediate notifications of critical events and developments that
-            impact your interests.
+            Plus de 144 mises à jour quotidiennes sur les risques et les tendances
+            géopolitiques pour être toujours informé des dernières alertes.
           </p>
         </div>
 
@@ -311,10 +314,9 @@
               />
             </svg>
           </div>
-          <h3 class="text-xl font-semibold mb-2">Policy Analysis</h3>
+          <h3 class="text-xl font-semibold mb-2">Choix des sources</h3>
           <p class="text-gray-600">
-            Expert analysis of international policies and regulatory changes
-            affecting global markets.
+            Accèdez à plus d'une vingtaine de sources de médias d'informations, choisi minituieusement pour vous.
           </p>
         </div>
 
@@ -371,10 +373,9 @@
               />
             </svg>
           </div>
-          <h3 class="text-xl font-semibold mb-2">Customizable Dashboard</h3>
+          <h3 class="text-xl font-semibold mb-2">Dashboard customisable</h3>
           <p class="text-gray-600">
-            Tailor your monitoring to focus on the regions, topics, and
-            indicators that matter most to you.
+            Customisez votre tableau de bord pour afficher les informations selon les médias et les sujets qui vous intéressent le plus.
           </p>
         </div>
       </div>
@@ -385,55 +386,64 @@
   <section id="statistics" class="py-16 bg-gray-50">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4">Global Intelligence Metrics</h2>
+        <h2 class="text-3xl font-bold mb-4">Indicateur globaux</h2>
         <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-          Our platform processes vast amounts of data to deliver actionable
-          intelligence and insights.
+            Notre plateforme traite de vastes quantités de données pour fournir des informations et des informations exploitables *
         </p>
+        
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <!-- Stat Card 1 -->
         <div class="stat-card bg-white rounded-lg p-6 shadow-md">
-          <h3 class="text-gray-500 text-sm font-medium mb-2">Data Sources</h3>
-          <div class="text-3xl font-bold">10,000+</div>
+          <h3 class="text-gray-500 text-sm font-medium mb-2">Sources de données</h3>
+          <div class="text-3xl font-bold"> APPEL API</div>
           <p class="text-gray-600 mt-1">
-            Verified global sources monitored daily
+            Sources vérifiées de média nationaux et internationaux
           </p>
         </div>
 
         <!-- Stat Card 2 -->
         <div class="stat-card bg-white rounded-lg p-6 shadow-md">
           <h3 class="text-gray-500 text-sm font-medium mb-2">
-            Countries Covered
+            Pays couvert
           </h3>
           <div class="text-3xl font-bold">195</div>
           <p class="text-gray-600 mt-1">
-            Complete global coverage and analysis
+            Couverture mondiale pour une analyse globale
           </p>
         </div>
 
         <!-- Stat Card 3 -->
         <div class="stat-card bg-white rounded-lg p-6 shadow-md">
-          <h3 class="text-gray-500 text-sm font-medium mb-2">Daily Updates</h3>
-          <div class="text-3xl font-bold">24/7</div>
-          <p class="text-gray-600 mt-1">Real-time monitoring and alerts</p>
+          <h3 class="text-gray-500 text-sm font-medium mb-2">Mise à jour quotidienne</h3>
+          <div class="text-3xl font-bold">Toutes les 10 min</div>
+          <p class="text-gray-600 mt-1">Arrivé des nouvelles en quasi-instantannées</p>
         </div>
 
         <!-- Stat Card 4 -->
         <div class="stat-card bg-white rounded-lg p-6 shadow-md">
           <h3 class="text-gray-500 text-sm font-medium mb-2">
-            Decision Accuracy
+            -
           </h3>
-          <div class="text-3xl font-bold">94.7%</div>
-          <p class="text-gray-600 mt-1">Proven forecast reliability rate</p>
+          <div class="text-3xl font-bold">0</div>
+          <p class="text-gray-600 mt-1">-</p>
         </div>
-      </div>
 
+       
+        
+      </div>
+      <div class="text-center my-2">
+        <!-- <h2 class="text-xl font-bold mb-4">Avertissement</h2> -->
+        <p class="text-sm text-gray-400 max-w-3xl mx-auto">
+            * Certaines données sont traitées par une intelligence artificielle et en cours de développement. Certaines données peuvent être inexactes. A manipuler avec précaution.
+        </p>
+        
+      </div>
       <!-- Data Visualization Section -->
       <div class="bg-white rounded-lg shadow-md p-6 mb-12">
         <h3 class="text-xl font-semibold mb-4">
-          Global Risk Distribution by Region
+          Tension et risque global par région
         </h3>
         <div class="chart-container">
           <div
@@ -474,32 +484,32 @@
           ></div>
         </div>
         <div class="flex justify-between text-xs text-gray-500 mt-2">
-          <div>Middle East</div>
+          <div>Moyen Orient</div>
           <div>Europe</div>
-          <div>Africa</div>
-          <div>Central Asia</div>
-          <div>East Asia</div>
-          <div>South Asia</div>
-          <div>North America</div>
-          <div>South America</div>
-          <div>Oceania</div>
+          <div>Afrique</div>
+          <div>Asie central</div>
+          <div>Asie de l'Est</div>
+          <div>Asie du Sud</div>
+          <div>Amérique du Nord</div>
+          <div>Amérique du Sud</div>
+          <div>Océanie</div>
         </div>
         <div class="flex items-center justify-center mt-4 space-x-4 text-sm">
           <div class="flex items-center">
             <div class="w-3 h-3 rounded-full bg-red-500 mr-1"></div>
-            <span>High Risk</span>
+            <span>Risque élevé</span>
           </div>
           <div class="flex items-center">
             <div class="w-3 h-3 rounded-full bg-orange-500 mr-1"></div>
-            <span>Medium Risk</span>
+            <span>Risque moyen</span>
           </div>
           <div class="flex items-center">
             <div class="w-3 h-3 rounded-full bg-yellow-500 mr-1"></div>
-            <span>Moderate Risk</span>
+            <span>Risque modéré</span>
           </div>
           <div class="flex items-center">
             <div class="w-3 h-3 rounded-full bg-green-500 mr-1"></div>
-            <span>Low Risk</span>
+            <span>Risque faible</span>
           </div>
         </div>
       </div>
@@ -507,14 +517,16 @@
       <!-- Key Metrics Section -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="bg-white rounded-lg shadow-md p-6">
-          <h3 class="text-xl font-semibold mb-4">Conflict Intensity Trends</h3>
+          <h3 class="text-xl font-semibold mb-4">
+            Risque de conflit
+          </h3>
           <div class="space-y-4">
             <div>
               <div class="flex justify-between mb-1">
                 <span class="text-sm font-medium text-gray-700"
-                  >Eastern Europe</span
+                  >Europe de l'Est</span
                 >
-                <span class="text-sm font-medium text-red-500">Critical</span>
+                <span class="text-sm font-medium text-red-500">Critique</span>
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2.5">
                 <div
@@ -526,9 +538,10 @@
             <div>
               <div class="flex justify-between mb-1">
                 <span class="text-sm font-medium text-gray-700"
-                  >Middle East</span
+                  >Moyen-Orient</span
                 >
-                <span class="text-sm font-medium text-orange-500">High</span>
+                <span class="text-sm font-medium text-orange-500">
+                    Élevée</span>
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2.5">
                 <div
@@ -540,9 +553,10 @@
             <div>
               <div class="flex justify-between mb-1">
                 <span class="text-sm font-medium text-gray-700"
-                  >South China Sea</span
+                  >
+                  Mer de Chine méridionale</span
                 >
-                <span class="text-sm font-medium text-orange-500">High</span>
+                <span class="text-sm font-medium text-orange-500">Élevée</span>
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2.5">
                 <div
@@ -554,10 +568,11 @@
             <div>
               <div class="flex justify-between mb-1">
                 <span class="text-sm font-medium text-gray-700"
-                  >Horn of Africa</span
+                  >Corne de l'Afrique
+                  </span
                 >
                 <span class="text-sm font-medium text-yellow-500"
-                  >Moderate</span
+                  >Modéré</span
                 >
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2.5">
@@ -570,10 +585,10 @@
             <div>
               <div class="flex justify-between mb-1">
                 <span class="text-sm font-medium text-gray-700"
-                  >Central America</span
+                  >Amérique centrale</span
                 >
                 <span class="text-sm font-medium text-yellow-500"
-                  >Moderate</span
+                  >Modéré</span
                 >
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2.5">
@@ -587,41 +602,41 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-md p-6">
-          <h3 class="text-xl font-semibold mb-4">Economic Stability Index</h3>
+          <h3 class="text-xl font-semibold mb-4">Indice de stabilité économique</h3>
           <div class="space-y-4">
             <div>
               <div class="flex justify-between mb-1">
                 <span class="text-sm font-medium text-gray-700"
-                  >North America</span
+                  >Amérique du Nord</span
                 >
                 <span class="text-sm font-medium text-green-500">Stable</span>
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2.5">
                 <div
                   class="bg-green-500 h-2.5 rounded-full"
-                  style="width: 90%"
+                  style="width: 75%"
                 ></div>
               </div>
             </div>
             <div>
               <div class="flex justify-between mb-1">
                 <span class="text-sm font-medium text-gray-700"
-                  >Western Europe</span
+                  >Europe de l'Ouest</span
                 >
                 <span class="text-sm font-medium text-green-500">Stable</span>
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2.5">
                 <div
                   class="bg-green-500 h-2.5 rounded-full"
-                  style="width: 85%"
+                  style="width: 70%"
                 ></div>
               </div>
             </div>
             <div>
               <div class="flex justify-between mb-1">
-                <span class="text-sm font-medium text-gray-700">East Asia</span>
+                <span class="text-sm font-medium text-gray-700">Asie de l'Est</span>
                 <span class="text-sm font-medium text-yellow-500"
-                  >Moderate</span
+                  >Modéré</span
                 >
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2.5">
@@ -634,10 +649,10 @@
             <div>
               <div class="flex justify-between mb-1">
                 <span class="text-sm font-medium text-gray-700"
-                  >South America</span
+                  >Amérique du Sud</span
                 >
                 <span class="text-sm font-medium text-orange-500"
-                  >Unstable</span
+                  >Instable</span
                 >
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2.5">
@@ -650,9 +665,9 @@
             <div>
               <div class="flex justify-between mb-1">
                 <span class="text-sm font-medium text-gray-700"
-                  >Sub-Saharan Africa</span
+                  >Afrique subsaharienne</span
                 >
-                <span class="text-sm font-medium text-red-500">Critical</span>
+                <span class="text-sm font-medium text-red-500">Critique</span>
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2.5">
                 <div
@@ -671,10 +686,9 @@
   <section id="news" class="py-16 bg-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4">Latest News & Analysis</h2>
+        <h2 class="text-3xl font-bold mb-4">Actualités et analyse</h2>
         <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-          Stay informed with our curated geopolitical insights and expert
-          commentary.
+          Restez informé des dernières actualités dans le monde entier.
         </p>
       </div>
 
@@ -861,7 +875,7 @@
           href="#"
           class="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-accent hover:bg-blue-700 transition-colors duration-200"
         >
-          View All Insights
+          Consulter votre dashboard
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5 ml-2"
@@ -887,7 +901,7 @@
       <div class="lg:flex lg:items-center lg:justify-between">
         <div class="lg:w-1/2 mb-8 lg:mb-0">
           <h2 class="text-3xl font-bold mb-4">
-            Ready to Transform Your Geopolitical Intelligence?
+            Prêt à révolutionner votre veille géopolitique ? 
           </h2>
           <p class="text-lg text-gray-300 mb-6">
             Join leading organizations that rely on our platform for strategic
@@ -1188,4 +1202,4 @@
       </div>
     </div>
   </footer>
-</body>
+</div>
