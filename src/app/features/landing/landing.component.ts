@@ -1,8 +1,11 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { NewsComponent } from '../../shared/components/landing/news.component';
 
 @Component({
   selector: 'app-landing',
+  standalone: true,
   templateUrl: './landing.component.html',
+  imports: [NewsComponent],
   styleUrls: ['./landing.component.css']
 })
 export class LandingComponent implements AfterViewInit {
