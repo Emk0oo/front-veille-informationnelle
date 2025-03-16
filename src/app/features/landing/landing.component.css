@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+body {
+    font-family: 'Inter', sans-serif;
+}
+.stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+.chart-container {
+    min-height: 250px;
+    position: relative;
+}
+.chart-bar {
+    position: absolute;
+    bottom: 0;
+    width: 8%;
+    border-radius: 4px 4px 0 0;
+    background-color: #3b82f6;
+    transition: height 1s ease;
+}
