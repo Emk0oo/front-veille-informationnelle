@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ArticleService } from './../../../core/services/article/article.service';
-import { Article } from '../../../core/models/article.model';
+import { ArticleService } from '../../../../core/services/article/article.service';
+import { Article } from '../../../../core/models/article.model';
 import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
