@@ -1,0 +1,110 @@
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4">Actualités et analyse</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+          Restez informé des dernières actualités dans le monde entier.
+        </p>
+      </div>
+  
+      <!-- État de chargement -->
+      <div *ngIf="isLoading" class="flex justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
+      </div>
+  
+      <!-- Message d'erreur -->
+      <div *ngIf="errorMessage" class="text-center p-8 bg-red-50 rounded-lg border border-red-100 my-8">
+        <p class="text-red-700">{{ errorMessage }}</p>
+        <button 
+          (click)="loadNews()" 
+          class="mt-4 px-4 py-2 bg-accent text-white rounded-md hover:bg-blue-700 transition-colors">
+          Réessayer
+        </button>
+      </div>
+  
+      <!-- Liste des actualités -->
+      <div *ngIf="!isLoading && !errorMessage && newsItems.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let item of newsItems" class="bg-white rounded-lg overflow-hidden shadow-md">
+          <div class="bg-slate-800 h-48 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-16 w-16 text-slate-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1"
+                [attr.d]="getIconPath(item.type)"
+              />
+            </svg>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-2">
+              <span
+                [ngClass]="getTagClass(item.type)"
+                class="text-xs font-semibold px-2.5 py-0.5 rounded"
+              >{{ item.type }}</span>
+              <span class="text-xs text-gray-500 ml-2">{{ item.timestamp | date:'medium' }}</span>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">
+              {{ item.title }}
+            </h3>
+            <p class="text-gray-600 mb-4">
+              {{ item.content }}
+            </p>
+            <a
+              [routerLink]="['/news', item.id]"
+              class="text-accent hover:text-blue-700 inline-flex items-center font-medium"
+            >
+              Lire l'analyse
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 ml-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Message si aucune actualité n'est disponible -->
+      <div *ngIf="!isLoading && !errorMessage && newsItems.length === 0" class="text-center p-8">
+        <p class="text-gray-600">Aucune actualité disponible pour le moment.</p>
+      </div>
+  
+      <div class="mt-12 text-center">
+        <a
+          routerLink="/dashboard"
+          class="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-accent hover:bg-blue-700 transition-colors duration-200"
+        >
+          Consulter votre dashboard
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 ml-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
