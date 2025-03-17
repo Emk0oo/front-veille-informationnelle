@@ -1,0 +1,98 @@
+<!-- shared/components/landing/hero.component.html -->
+<section id="hero" class="bg-gradient-to-br from-white to-gray-100 py-16 md:py-24 overflow-hidden relative">
+    <!-- Sonar/Radar animation background -->
+    <div class="absolute inset-0 overflow-hidden z-0">
+      <!-- Grille grise légère -->
+      <div class="grid-pattern"></div>
+      
+      <!-- Sonar container -->
+      <div class="sonar-container">
+        <div class="sonar-pulse"></div>
+        <div class="sonar-pulse" style="animation-delay: 6s"></div>
+        <div class="sonar-pulse" style="animation-delay: 15s"></div>
+      </div>
+      
+      <!-- Points rouges aléatoires -->
+      <div id="radar-dots"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-8 md:mb-0">
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-800">
+            Tableau de bord de <span class="text-blue-600">veille géopolitique</span>
+          </h1>
+          <p class="text-lg text-gray-600 mb-6">
+            Accédez à des données en temps réel, à des analyses avancées et à
+            des informations d'experts, le tout dans un tableau de bord
+            intuitif.
+          </p>
+          <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-md transition-colors duration-200 shadow-md">
+              Créer votre dashboard
+            </button>
+            <button (click)="scrollToElement('news')" class="bg-transparent hover:bg-gray-100 border border-gray-300 text-gray-700 font-medium py-3 px-6 rounded-md transition-colors duration-200">
+              Voir les dernières actualités
+            </button>
+          </div>
+        </div>
+        
+        <div class="md:w-1/2">
+          <div class="bg-white rounded-xl shadow-xl transform rotate-1 transition-transform hover:rotate-0 duration-300">
+            <div class="bg-gray-100 rounded-t-xl p-3 flex justify-between items-center border-b border-gray-200">
+              <div class="flex space-x-2">
+                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+              </div>
+              <div class="text-xs text-gray-500 font-medium">GeoVision Dashboard</div>
+            </div>
+            
+            <div class="p-4 bg-white rounded-b-xl">
+              <div class="flex justify-between mb-4">
+                <div class="text-xs font-medium text-gray-500">
+                  NIVEAU DE RISQUE
+                </div>
+                <div class="text-xs font-medium text-orange-600">ÉLEVÉ</div>
+              </div>
+              
+              <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                <div class="bg-orange-500 h-2.5 rounded-full" style="width: 65%"></div>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="bg-gray-100 p-3 rounded-lg hover:shadow-md transition-shadow duration-200">
+                  <div class="text-xs text-gray-500 mb-1">Conflits actifs</div>
+                  <div class="text-lg font-semibold text-gray-800">27</div>
+                </div>
+                <div class="bg-gray-100 p-3 rounded-lg hover:shadow-md transition-shadow duration-200">
+                  <div class="text-xs text-gray-500 mb-1">Régions surveillées</div>
+                  <div class="text-lg font-semibold text-gray-800">142</div>
+                </div>
+                <div class="bg-gray-100 p-3 rounded-lg hover:shadow-md transition-shadow duration-200">
+                  <div class="text-xs text-gray-500 mb-1">Trade Disputes</div>
+                  <div class="text-lg font-semibold text-gray-800">18</div>
+                </div>
+                <div class="bg-gray-100 p-3 rounded-lg hover:shadow-md transition-shadow duration-200">
+                  <div class="text-xs text-gray-500 mb-1">Elections</div>
+                  <div class="text-lg font-semibold text-gray-800">12</div>
+                </div>
+              </div>
+              
+              <div class="text-xs text-gray-500 mb-2">DERNIÈRES ALERTES</div>
+              <div class="space-y-2">
+                <div class="bg-gray-100 p-2 rounded-lg flex items-center hover:bg-gray-200 transition-colors duration-200">
+                  <div class="w-2 h-2 rounded-full bg-red-500 mr-2"></div>
+                  <span class="text-xs text-gray-700">Guerre en Ukraine : débacle à Koursk</span>
+                </div>
+                <div class="bg-gray-100 p-2 rounded-lg flex items-center hover:bg-gray-200 transition-colors duration-200">
+                  <div class="w-2 h-2 rounded-full bg-yellow-500 mr-2"></div>
+                  <span class="text-xs text-gray-700">Serbie : manifestation massive contre le pouvoir</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

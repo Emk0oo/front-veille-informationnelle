@@ -1,105 +1,107 @@
-<header class="bg-primary shadow-md">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center py-4">
-        <div class="flex items-center">
-          <div class="text-white font-bold text-xl flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-8 w-8 mr-2 text-accent"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            GeoVision
-          </div>
-        </div>
-
-        <!-- Desktop Navigation -->
-        <nav class="hidden md:flex items-center space-x-6">
-          <a
-            (click)="scrollToElement('features')"
-            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-            >Fonctionnalités</a
+<header class="fixed w-full transition-all duration-300 z-50" [ngClass]="{'bg-white/70 backdrop-blur-md shadow-sm': isScrolled, 'bg-transparent': !isScrolled}">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center py-4">
+      <!-- Logo & Brand -->
+      <div class="flex items-center">
+        <a (click)="scrollToElement('hero')" class="text-gray-800 font-extrabold text-xl flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8 mr-2 text-blue-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-          <a
-            (click)="scrollToElement('statistics')"
-            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-            >Statistiques</a
-          >
-          <a
-            (click)="scrollToElement('news')"
-            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-            >Actualités et analyse</a
-          >
-          <a
-            (click)="scrollToElement('contact')"
-            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-            >Contact</a
-          >
-          <button
-            class="bg-accent hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
-          >
-            Se connecter
-          </button>
-        </nav>
-
-        <!-- Mobile Navigation Toggle -->
-        <div class="md:hidden">
-          <button #menuToggle class="text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-        </div>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span class="font-light">Geo</span><span>Watch</span>
+          <span class="text-blue-500 ml-1 text-xs font-medium bg-gray-100 rounded-full px-2 py-0.5">Beta</span>
+        </a>
       </div>
 
-      <!-- Mobile Navigation Menu -->
-      <div #mobileMenu class="md:hidden hidden pb-4">
-        <div class="flex flex-col space-y-3">
+      <!-- Desktop Navigation - Centered -->
+      <nav class="hidden md:flex items-center justify-center flex-1 mx-4">
+        <div class="flex space-x-8">
           <a
             (click)="scrollToElement('features')"
-            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-            >Fonctionnalités</a
-          >
+            class="text-gray-600 hover:text-gray-900 font-medium transition-all duration-200 cursor-pointer hover:bg-gray-100 rounded-md px-3 py-1"
+          >Fonctionnalités</a>
           <a
             (click)="scrollToElement('statistics')"
-            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-            >Statistiques</a
-          >
+            class="text-gray-600 hover:text-gray-900 font-medium transition-all duration-200 cursor-pointer hover:bg-gray-100 rounded-md px-3 py-1"
+          >Statistiques</a>
           <a
             (click)="scrollToElement('news')"
-            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-            >Actualités et analyse</a
-          >
+            class="text-gray-600 hover:text-gray-900 font-medium transition-all duration-200 cursor-pointer hover:bg-gray-100 rounded-md px-3 py-1"
+          >Actualités</a>
           <a
             (click)="scrollToElement('contact')"
-            class="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
-            >Contact</a
+            class="text-gray-600 hover:text-gray-900 font-medium transition-all duration-200 cursor-pointer hover:bg-gray-100 rounded-md px-3 py-1"
+          >Contact</a>
+        </div>
+      </nav>
+
+      <!-- Login Button - Right Aligned -->
+      <div class="hidden md:block">
+        <button
+          class="bg-blue-500 hover:bg-blue-400 text-white font-medium py-1.5 px-4 rounded-md transition-all duration-300"
+        >
+          Se connecter
+        </button>
+      </div>
+
+      <!-- Mobile Navigation Toggle -->
+      <div class="md:hidden">
+        <button #menuToggle (click)="toggleMobileMenu()" class="text-gray-800 p-2 rounded-lg border border-gray-200">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <div #mobileMenu class="md:hidden hidden pb-4">
+      <div class="flex flex-col space-y-2 bg-gray-50 rounded-lg p-4 mt-2 shadow-md">
+        <a
+          (click)="scrollToElement('features')"
+          class="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer px-3 py-2 hover:bg-gray-100 rounded-md"
+        >Fonctionnalités</a>
+        <a
+          (click)="scrollToElement('statistics')"
+          class="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer px-3 py-2 hover:bg-gray-100 rounded-md"
+        >Statistiques</a>
+        <a
+          (click)="scrollToElement('news')"
+          class="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer px-3 py-2 hover:bg-gray-100 rounded-md"
+        >Actualités</a>
+        <a
+          (click)="scrollToElement('contact')"
+          class="text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer px-3 py-2 hover:bg-gray-100 rounded-md"
+        >Contact</a>
+        <div class="pt-2 border-t border-gray-200">
           <button
-            class="bg-accent hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
+            class="bg-blue-500 hover:bg-blue-400 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 w-full"
           >
             Se connecter
           </button>
         </div>
       </div>
     </div>
+  </div>
 </header>
