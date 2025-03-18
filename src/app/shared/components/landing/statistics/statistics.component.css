@@ -1,0 +1,47 @@
+.chart-container {
+    position: relative;
+    height: 250px;
+    width: 100%;
+    border-bottom: 1px solid #e5e7eb; /* gray-200 */
+    margin-bottom: 8px;
+  }
+  
+  .chart-bar {
+    position: absolute;
+    bottom: 0;
+    width: 4%;
+    border-radius: 4px 4px 0 0;
+    transition: height 1s ease-in-out;
+  }
+  
+  /* Classes pour les différents niveaux de risque */
+  .risk-high {
+    background-color: #ef4444; /* red-500 */
+  }
+  
+  .risk-medium {
+    background-color: #f97316; /* orange-500 */
+  }
+  
+  .risk-moderate {
+    background-color: #eab308; /* yellow-500 */
+  }
+  
+  .risk-low {
+    background-color: #22c55e; /* green-500 */
+  }
+  
+  /* Animation pour les barres du graphique */
+  @keyframes growUp {
+    from { height: 0; }
+    to { height: 100%; }
+  }
+  
+  .stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
