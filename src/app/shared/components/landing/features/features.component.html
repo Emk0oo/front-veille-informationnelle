@@ -1,0 +1,25 @@
+<section id="features" class="py-16 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4">
+          Comprehensive Geopolitical Intelligence
+        </h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+          Accédez à des données en temps réel et à des à des analyses avancées le tout dans un tableau de bord intuitif.
+        </p>
+      </div>
+  
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Feature Items -->
+        <div *ngFor="let feature of features" class="bg-white rounded-lg p-6 shadow-lg">
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" [innerHTML]="feature.icon"></svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">{{ feature.title }}</h3>
+          <p class="text-gray-600">
+            {{ feature.description }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>

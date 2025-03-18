@@ -1,9 +1,11 @@
 // shared/components/landing/hero.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.scss']
 })
@@ -15,27 +17,38 @@ export class HeroComponent implements OnInit, OnDestroy {
   private currentPulseRadius = 0;
   private pulseMaxRadius = 1000;
   private pulseStep = 5;
+  private isBrowser: boolean;
   
-  constructor() { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit(): void {
-    // Initialisation du radar après le chargement du composant
-    setTimeout(() => {
-      this.initializeRadar();
-    }, 200);
+    // Initialisation du radar après le chargement du composant, uniquement côté client
+    if (this.isBrowser) {
+      setTimeout(() => {
+        if (this.isBrowser) {  // Vérifier à nouveau en cas de changement d'état
+          this.initializeRadar();
+        }
+      }, 200);
+    }
   }
 
   ngOnDestroy(): void {
     // Nettoyage des intervalles lors de la destruction du composant
-    if (this.dotsInterval) {
-      clearInterval(this.dotsInterval);
-    }
-    if (this.pulseInterval) {
-      clearInterval(this.pulseInterval);
+    if (this.isBrowser) {
+      if (this.dotsInterval) {
+        clearInterval(this.dotsInterval);
+      }
+      if (this.pulseInterval) {
+        clearInterval(this.pulseInterval);
+      }
     }
   }
 
   scrollToElement(elementId: string): void {
+    if (!this.isBrowser) return;
+    
     const element = document.getElementById(elementId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -43,6 +56,8 @@ export class HeroComponent implements OnInit, OnDestroy {
   }
 
   private initializeRadar(): void {
+    if (!this.isBrowser) return;
+    
     const container = document.querySelector('.sonar-container') as HTMLElement;
     if (!container) return;
     
@@ -57,17 +72,23 @@ export class HeroComponent implements OnInit, OnDestroy {
     
     // Repositionner les points toutes les 5 secondes
     this.dotsInterval = setInterval(() => {
-      this.repositionDots();
+      if (this.isBrowser) {  // Vérifier à nouveau en cas de changement d'état
+        this.repositionDots();
+      }
     }, 5000);
     
     // Simuler l'effet de radar qui détecte les points
     this.pulseInterval = setInterval(() => {
-      this.checkRadarCollisions();
-      this.currentPulseRadius = (this.currentPulseRadius + this.pulseStep) % this.pulseMaxRadius;
+      if (this.isBrowser) {  // Vérifier à nouveau en cas de changement d'état
+        this.checkRadarCollisions();
+        this.currentPulseRadius = (this.currentPulseRadius + this.pulseStep) % this.pulseMaxRadius;
+      }
     }, 50);
   }
 
   private createRandomDots(count: number): void {
+    if (!this.isBrowser) return;
+    
     const dotsContainer = document.getElementById('radar-dots');
     if (!dotsContainer) return;
     
@@ -91,6 +112,8 @@ export class HeroComponent implements OnInit, OnDestroy {
   }
 
   private repositionDots(): void {
+    if (!this.isBrowser) return;
+    
     const containerWidth = window.innerWidth;
     const containerHeight = window.innerHeight;
     
@@ -110,6 +133,8 @@ export class HeroComponent implements OnInit, OnDestroy {
   }
 
   private checkRadarCollisions(): void {
+    if (!this.isBrowser) return;
+    
     this.dots.forEach(dot => {
       const dotRect = dot.getBoundingClientRect();
       const dotCenter = {
@@ -130,7 +155,9 @@ export class HeroComponent implements OnInit, OnDestroy {
         
         // Enlever la classe active après l'animation
         setTimeout(() => {
-          dot.classList.remove('active');
+          if (this.isBrowser) {  // Vérifier à nouveau en cas de changement d'état
+            dot.classList.remove('active');
+          }
         }, 1000);
       }
     });
