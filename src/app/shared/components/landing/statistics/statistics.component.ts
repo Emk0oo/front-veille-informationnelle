@@ -6,7 +6,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './statistics.component.html',
-  styleUrls: ['./statistics.component.scss']
+  styleUrls: ['./statistics.component.css']
 })
 export class StatisticsComponent implements OnInit, AfterViewInit {
   private isBrowser: boolean;
@@ -66,41 +66,29 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
     { region: 'Océanie', left: '85%', height: '35%', color: '#eab308' }
   ];
 
+  // Variable pour contrôler l'animation
+  showBars = false;
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   ngOnInit(): void {
-    // Aucune initialisation côté serveur requise
+    // Initialiser les barres à 0% de hauteur pour l'animation
+    if (this.isBrowser) {
+      // On garde les hauteurs originales mais on indique de ne pas afficher les barres
+      this.showBars = false;
+    }
   }
 
   ngAfterViewInit(): void {
     if (this.isBrowser) {
-      // Exécuter avec un léger délai pour s'assurer que le DOM est complètement chargé
+      // Déclencher l'animation après un court délai pour assurer que le DOM est prêt
       setTimeout(() => {
-        if (this.isBrowser) {
-          this.initializeChartBars();
-        }
+        // Afficher les barres avec leur hauteur réelle pour enclencher l'animation
+        this.showBars = true;
       }, 300);
     }
-  }
-
-  // Animation des barres du graphique
-  private initializeChartBars(): void {
-    if (!this.isBrowser) return;
-    
-    const bars = document.querySelectorAll('.chart-bar');
-    
-    bars.forEach(bar => {
-      const height = (bar as HTMLElement).style.height;
-      (bar as HTMLElement).style.height = '0';
-      
-      setTimeout(() => {
-        if (this.isBrowser) {
-          (bar as HTMLElement).style.height = height;
-        }
-      }, 300);
-    });
   }
 
   // Méthode pour obtenir la classe CSS de couleur en fonction du niveau de risque

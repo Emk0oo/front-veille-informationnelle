@@ -31,11 +31,10 @@
       </h3>
       <div class="chart-container">
         <div *ngFor="let bar of chartBars" 
-          class="chart-bar" 
-          [style.left]="bar.left" 
+          class="chart-bar"
+          [style.left]="bar.left"
           [style.backgroundColor]="bar.color"
-          style="height: 0">
-          <!-- Note: height est initialisé à 0 pour l'animation -->
+          [style.height]="showBars ? bar.height : '0%'">
         </div>
       </div>
       <div class="flex justify-between text-xs text-gray-500 mt-2">
