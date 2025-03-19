@@ -30,17 +30,32 @@
         Tension et risque global par région
       </h3>
       <div class="chart-container">
-        <div *ngFor="let bar of chartBars" 
-          class="chart-bar"
-          [style.left]="bar.left"
-          [style.backgroundColor]="bar.color"
-          [style.height]="showBars ? bar.height : '0%'">
-        </div>
+        <!-- Barres du graphique avec largeur réduite mais hauteur conservée -->
+        <div class="chart-bar" style="left: 4%; height: 65%; background-color: #ef4444;"></div>
+        <div class="chart-bar" style="left: 15.5%; height: 45%; background-color: #f97316;"></div>
+        <div class="chart-bar" style="left: 26.5%; height: 30%; background-color: #eab308;"></div>
+        <div class="chart-bar" style="left: 37.5%; height: 80%; background-color: #ef4444;"></div>
+        <div class="chart-bar" style="left: 48.5%; height: 20%; background-color: #22c55e;"></div>
+        <div class="chart-bar" style="left: 59.5%; height: 40%; background-color: #f97316;"></div>
+        <div class="chart-bar" style="left: 70.5%; height: 55%; background-color: #f97316;"></div>
+        <div class="chart-bar" style="left: 81.5%; height: 25%; background-color: #eab308;"></div>
+        <div class="chart-bar" style="left: 92.5%; height: 35%; background-color: #eab308;"></div>
       </div>
-      <div class="flex justify-between text-xs text-gray-500 mt-2">
-        <div *ngFor="let bar of chartBars">{{ bar.region }}</div>
+      
+      <!-- Labels alignés avec les barres -->
+      <div class="region-labels">
+        <div class="region-label" style="left: 4%;">Moyen Orient</div>
+        <div class="region-label" style="left: 15.5%;">Europe</div>
+        <div class="region-label" style="left: 26.5%;">Afrique</div>
+        <div class="region-label" style="left: 37.5%;">Asie central</div>
+        <div class="region-label" style="left: 48.5%;">Asie de l'Est</div>
+        <div class="region-label" style="left: 59.5%;">Asie du Sud</div>
+        <div class="region-label" style="left: 70.5%;">Am. Nord</div>
+        <div class="region-label" style="left: 81.5%;">Am. Sud</div>
+        <div class="region-label" style="left: 92.5%;">Océanie</div>
       </div>
-      <div class="flex items-center justify-center mt-4 space-x-4 text-sm">
+      
+      <div class="flex items-center justify-center mt-12 space-x-4 text-sm">
         <div class="flex items-center">
           <div class="w-3 h-3 rounded-full bg-red-500 mr-1"></div>
           <span>Risque élevé</span>

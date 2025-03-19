@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-statistics',
@@ -8,8 +8,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.css']
 })
-export class StatisticsComponent implements OnInit, AfterViewInit {
-  private isBrowser: boolean;
+export class StatisticsComponent implements OnInit {
   
   // Données pour les statistiques
   statCards = [
@@ -53,42 +52,10 @@ export class StatisticsComponent implements OnInit, AfterViewInit {
     { region: 'Afrique subsaharienne', level: 'Critique', percentage: 25, color: 'red' }
   ];
 
-  // Données pour les barres du graphique
-  chartBars = [
-    { region: 'Moyen Orient', left: '5%', height: '65%', color: '#ef4444' },
-    { region: 'Europe', left: '15%', height: '45%', color: '#f97316' },
-    { region: 'Afrique', left: '25%', height: '30%', color: '#eab308' },
-    { region: 'Asie central', left: '35%', height: '80%', color: '#ef4444' },
-    { region: 'Asie de l\'Est', left: '45%', height: '20%', color: '#22c55e' },
-    { region: 'Asie du Sud', left: '55%', height: '40%', color: '#f97316' },
-    { region: 'Amérique du Nord', left: '65%', height: '55%', color: '#f97316' },
-    { region: 'Amérique du Sud', left: '75%', height: '25%', color: '#eab308' },
-    { region: 'Océanie', left: '85%', height: '35%', color: '#eab308' }
-  ];
-
-  // Variable pour contrôler l'animation
-  showBars = false;
-
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
-  }
+  constructor() {}
 
   ngOnInit(): void {
-    // Initialiser les barres à 0% de hauteur pour l'animation
-    if (this.isBrowser) {
-      // On garde les hauteurs originales mais on indique de ne pas afficher les barres
-      this.showBars = false;
-    }
-  }
-
-  ngAfterViewInit(): void {
-    if (this.isBrowser) {
-      // Déclencher l'animation après un court délai pour assurer que le DOM est prêt
-      setTimeout(() => {
-        // Afficher les barres avec leur hauteur réelle pour enclencher l'animation
-        this.showBars = true;
-      }, 300);
-    }
+    // Pas d'initialisation nécessaire puisque nous utilisons une approche statique
   }
 
   // Méthode pour obtenir la classe CSS de couleur en fonction du niveau de risque

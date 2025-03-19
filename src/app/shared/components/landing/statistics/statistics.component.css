@@ -1,17 +1,44 @@
 .chart-container {
   position: relative;
-  height: 250px;
+  height: 250px; /* Hauteur originale maintenue */
   width: 100%;
   border-bottom: 1px solid #e5e7eb; /* gray-200 */
-  margin-bottom: 8px;
+  margin-bottom: 24px; /* Augmenté pour laisser de la place aux labels */
 }
 
 .chart-bar {
   position: absolute;
   bottom: 0;
-  width: 8%;
+  width: 3%; /* Largeur fortement réduite */
   border-radius: 4px 4px 0 0;
-  transition: height 1.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* Animation initiale */
+  animation: growBar 1.5s ease-out forwards;
+  /* On commence avec une hauteur de 0 */
+  height: 0;
+}
+
+.region-labels {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  margin-top: 5px;
+}
+
+.region-label {
+  position: absolute;
+  transform: translateX(-50%); /* Centre le texte par rapport à sa position */
+  font-size: 0.75rem; /* text-xs */
+  color: #6b7280; /* text-gray-500 */
+  white-space: nowrap;
+}
+
+@keyframes growBar {
+  0% {
+    height: 0;
+  }
+  100% {
+    /* La hauteur finale est définie directement dans le style en ligne */
+  }
 }
 
 /* Classes pour les différents niveaux de risque */
