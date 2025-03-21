@@ -1,24 +1,34 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+
 import { AuthService } from '../../core/services/auth/auth.service';
-import { ArticleService } from '../../core/services/article/article.service';
-import { Article } from '../../core/models/article.model';
+import { FeedRssService, NewsFeed, ArticleItem } from '../../core/services/feedRss/feed-rss.service';
+import { ArticleCardComponent } from '../../shared/components/dashboard/article-card.component';
+
+interface FeedSource {
+  id: number;
+  name: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
+}
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ArticleCardComponent, DatePipe],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
   // Services
   private authService = inject(AuthService);
-  private articleService = inject(ArticleService);
+  private FeedRssService = inject(FeedRssService);
   private http = inject(HttpClient);
   
   // UI state variables
@@ -26,14 +36,16 @@ export class DashboardComponent implements OnInit {
   isMobileMenuOpen: boolean = false;
   
   // Data variables
-  articles: Article[] = [];
-  filteredArticles: Article[] = [];
+  newsFeeds: NewsFeed[] = [];
+  filteredFeeds: NewsFeed[] = [];
+  allArticles: {article: ArticleItem, source: string, categoryId: number}[] = [];
+  filteredArticles: {article: ArticleItem, source: string, categoryId: number}[] = [];
   isLoading: boolean = false;
   errorMessage: string | null = null;
   
   // Filter variables
-  selectedTheme: string = 'Tous les thèmes';
-  selectedSource: string = 'Toutes les sources';
+  selectedTheme: string = 'all';
+  selectedSource: string = 'all';
   currentDate: Date = new Date();
   
   // Stats
@@ -42,10 +54,32 @@ export class DashboardComponent implements OnInit {
   riskZonesCount: number = 0;
   alertsCount: number = 0;
   
+  // Pagination
+  articlesPerPage: number = 6;
+  currentPage: number = 1;
+  
+  // Sources et catégories
+  sources: FeedSource[] = [
+    { id: 1, name: 'Le Monde' },
+    { id: 2, name: 'Franceinfo' },
+    { id: 3, name: 'BBC News' },
+    { id: 4, name: 'Reuters' },
+    { id: 5, name: 'CNN' }
+  ];
+  
+  categories: Category[] = [
+    { id: 1, name: 'Politique' },
+    { id: 2, name: 'Économie' },
+    { id: 3, name: 'Conflits' },
+    { id: 4, name: 'Environnement' },
+    { id: 5, name: 'Technologie' },
+    { id: 6, name: 'Société' }
+  ];
+  
   constructor() {}
   
   ngOnInit(): void {
-    this.loadArticles();
+    this.loadNewsFeeds();
     this.loadStats();
   }
   
@@ -63,54 +97,87 @@ export class DashboardComponent implements OnInit {
   }
   
   // Data loading methods
-  loadArticles(): void {
+  loadNewsFeeds(): void {
     this.isLoading = true;
-    this.articleService.getLatestArticles().subscribe({
+    const dateStr = this.formatDateForApi(this.currentDate);
+    
+    this.FeedRssService.getFeedsByDate(dateStr).subscribe({
       next: (data) => {
-        this.articles = data;
-        this.filteredArticles = [...this.articles];
+        this.newsFeeds = data;
+        this.processNewsFeeds();
         this.isLoading = false;
-        this.newArticlesCount = this.articles.length;
       },
       error: (error) => {
-        this.errorMessage = 'Impossible de charger les articles. Veuillez réessayer plus tard.';
+        this.errorMessage = 'Impossible de charger les actualités. Veuillez réessayer plus tard.';
         this.isLoading = false;
-        console.error('Erreur de chargement des articles:', error);
+        console.error('Erreur de chargement des actualités:', error);
         
-        // Pour la démo, créons des articles fictifs en cas d'erreur
-        this.createMockArticles();
+        // Pour la démo, créons des actualités fictives en cas d'erreur
+        this.createMockNewsFeeds();
       }
     });
+  }
+  
+  processNewsFeeds(): void {
+    this.allArticles = [];
+    
+    this.newsFeeds.forEach(feed => {
+      const sourceName = this.getSourceNameById(feed.feed_id);
+      
+      feed.items.forEach(article => {
+        this.allArticles.push({
+          article,
+          source: sourceName,
+          categoryId: feed.category_id
+        });
+      });
+    });
+    
+    // Tri par date (plus récent d'abord)
+    this.allArticles.sort((a, b) => {
+      return new Date(b.article.isoDate).getTime() - new Date(a.article.isoDate).getTime();
+    });
+    
+    this.applyFilters();
+    this.newArticlesCount = this.allArticles.length;
   }
   
   loadStats(): void {
     // Dans un cas réel, nous chargerions ces stats depuis une API
     // Pour la démo, on utilise des valeurs statiques
-    this.newArticlesCount = 24;
+    this.FeedRssService.getArticlesCount().subscribe({
+      next: (count) => {
+        this.newArticlesCount = count;
+      },
+      error: () => {
+        this.newArticlesCount = 24; // Valeur par défaut
+      }
+    });
+    
     this.activeRegionsCount = 16;
     this.riskZonesCount = 8;
     this.alertsCount = 3;
   }
   
   // Filtering methods
-  filterArticles(): void {
-    this.filteredArticles = this.articles.filter(article => {
+  applyFilters(): void {
+    this.filteredArticles = this.allArticles.filter(item => {
       let matchesTheme = true;
       let matchesSource = true;
       
-      if (this.selectedTheme !== 'Tous les thèmes') {
-        // Dans un cas réel, nous utiliserions une propriété de l'article
-        // Pour la démo, nous filtrons par titre (qui contiendrait idéalement le thème)
-        matchesTheme = article.title.toLowerCase().includes(this.selectedTheme.toLowerCase());
+      if (this.selectedTheme !== 'all') {
+        matchesTheme = item.categoryId.toString() === this.selectedTheme;
       }
       
-      if (this.selectedSource !== 'Toutes les sources') {
-        // Dans un cas réel, nous utiliserions une propriété de source dans l'article
-        matchesSource = article.feed_id.toString() === this.selectedSource;
+      if (this.selectedSource !== 'all') {
+        matchesSource = this.getSourceNameById(parseInt(this.selectedSource)) === item.source;
       }
       
       return matchesTheme && matchesSource;
     });
+    
+    // Réinitialiser la pagination lors d'un changement de filtre
+    this.currentPage = 1;
   }
   
   // Date navigation
@@ -120,80 +187,117 @@ export class DashboardComponent implements OnInit {
     newDate.setDate(newDate.getDate() + direction);
     this.currentDate = newDate;
     
-    // Dans un cas réel, nous rechargerions les articles pour cette date
-    this.loadArticles();
+    // Recharger les actualités pour cette date
+    this.loadNewsFeeds();
   }
   
-  formatDate(date: Date): string {
-    return date.toLocaleDateString('fr-FR', {
+  // Pagination
+  loadMoreArticles(): void {
+    this.currentPage++;
+  }
+  
+  get paginatedArticles(): {article: ArticleItem, source: string, categoryId: number}[] {
+    const startIndex = 0;
+    const endIndex = this.currentPage * this.articlesPerPage;
+    return this.filteredArticles.slice(startIndex, endIndex);
+  }
+  
+  get hasMoreArticles(): boolean {
+    return this.currentPage * this.articlesPerPage < this.filteredArticles.length;
+  }
+  
+  // Helper methods
+  getSourceNameById(id: number): string {
+    const source = this.sources.find(src => src.id === id);
+    return source ? source.name : 'Source inconnue';
+  }
+  
+  formatDateForApi(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
+  formatDateForDisplay(date: Date): string {
+    const options: Intl.DateTimeFormatOptions = {
       weekday: 'long',
       day: 'numeric',
       month: 'short',
       year: 'numeric'
-    });
+    };
+    return date.toLocaleDateString('fr-FR', options);
   }
   
-  // Helper methods pour la démo seulement
-  private createMockArticles(): void {
-    // Créer des articles fictifs pour la démo
-    this.articles = [
+  // Méthodes pour la démo seulement
+  private createMockNewsFeeds(): void {
+    const mockNewsFeeds: NewsFeed[] = [
       {
-        id: 1,
         feed_id: 1,
-        category_id: 1,
-        title: 'Les négociations diplomatiques s\'intensifient dans le cadre du conflit en Ukraine',
-        link: '#',
-        content: 'Contenu détaillé de l\'article...',
-        content_snippet: 'Les dirigeants européens se réunissent pour discuter de nouvelles mesures face aux récents développements dans le conflit ukrainien.',
-        guid: 'guid1',
-        iso_date: '2025-03-21T10:00:00Z',
-        image_url: 'https://example.com/image1.jpg',
-        published_at: '2025-03-21T10:00:00Z'
+        category_id: 3, // Conflits
+        title: "International : Toute l'actualité sur Le Monde.fr.",
+        items: [
+          {
+            title: "En direct, guerre à Gaza : l'armée israélienne dit avoir « frappé des terroristes » dans un hôpital désaffecté",
+            link: "https://www.lemonde.fr/guerre-au-proche-orient/live/2025/03/21/en-direct-guerre-a-gaza-l-armee-israelienne-dit-avoir-frappe-des-terroristes-dans-un-hopital-desaffecte_6582862_6325529.html",
+            pubDate: "Fri, 21 Mar 2025 22:20:47 +0100",
+            mediaContent: [
+              {
+                $: {
+                  width: "644",
+                  height: "322",
+                  url: "https://img.lemde.fr/2025/03/21/779/0/5760/2880/644/322/60/0/6bb96c5_sirius-fs-upload-1-r2w3pne3rbxj-1742562037118-105651.jpg"
+                },
+                'media:description': [
+                  {
+                    _: "Des Palestiniens fuient Beit Lahya, dans le nord de la bande de Gaza, le 21 mars 2025.",
+                    $: {
+                      type: "plain"
+                    }
+                  }
+                ],
+                'media:credit': [
+                  {
+                    _: "BASHAR TALEB / AFP",
+                    $: {
+                      scheme: "urn:ebu"
+                    }
+                  }
+                ]
+              }
+            ],
+            content: "La Turquie a condamné « fermement la destruction par Israël de l'Hôpital de l'amitié turco-palestinienne », dénonçant un « ciblage délibéré » de l'établissement par l'armée israélienne.",
+            contentSnippet: "La Turquie a condamné « fermement la destruction par Israël de l'Hôpital de l'amitié turco-palestinienne », dénonçant un « ciblage délibéré » de l'établissement par l'armée israélienne.",
+            guid: "https://www.lemonde.fr/guerre-au-proche-orient/live/2025/03/21/en-direct-guerre-a-gaza-l-armee-israelienne-dit-avoir-frappe-des-terroristes-dans-un-hopital-desaffecte_6582862_6325529.html",
+            isoDate: "2025-03-21T21:20:47.000Z"
+          }
+        ]
       },
       {
-        id: 2,
         feed_id: 2,
-        category_id: 2,
-        title: 'Le FMI prévient d\'un ralentissement économique global',
-        link: '#',
-        content: 'Contenu détaillé de l\'article...',
-        content_snippet: 'Dans son dernier rapport, le Fonds Monétaire International alerte sur les risques de récession dans plusieurs économies majeures.',
-        guid: 'guid2',
-        iso_date: '2025-03-21T08:00:00Z',
-        image_url: 'https://example.com/image2.jpg',
-        published_at: '2025-03-21T08:00:00Z'
-      },
-      {
-        id: 3,
-        feed_id: 3,
-        category_id: 3,
-        title: 'Nouvelles tensions à la frontière entre deux pays d\'Asie du Sud-Est',
-        link: '#',
-        content: 'Contenu détaillé de l\'article...',
-        content_snippet: 'Des incidents militaires ont été rapportés à la frontière, suscitant des inquiétudes quant à une possible escalade des tensions.',
-        guid: 'guid3',
-        iso_date: '2025-03-21T06:00:00Z',
-        image_url: 'https://example.com/image3.jpg',
-        published_at: '2025-03-21T06:00:00Z'
+        category_id: 1, // Politique
+        title: "Franceinfo- Monde",
+        items: [
+          {
+            title: "Fermeture de l'aéroport de Londres-Heathrow : ce que l'on sait de l'incident qui perturbe le trafic aérien mondial",
+            link: "https://www.francetvinfo.fr/monde/royaume-uni/fermeture-de-l-aeroport-de-londres-heathrow-ce-que-le-l-on-sait-de-l-incident-qui-perturbe-le-trafic-aerien-mondial_7143177.html",
+            pubDate: "Fri, 21 Mar 2025 22:30:46 +0100",
+            enclosure: {
+              length: "243",
+              type: "image/jpeg",
+              url: "https://www.francetvinfo.fr/pictures/obl1GX49KM27W7H5WmTRHwJ5W3Y/0x18:1024x594/432x243/filters:format(jpg)/2025/03/21/000-37dv6mx-67dd4a62952c0165602171.jpg"
+            },
+            content: "Le plus grand aéroport d'Europe a été contraint de fermer vendredi, à cause d'une panne de courant électrique provoquée par un incendie. La police antiterroriste britannique a annoncé mener une enquête.",
+            contentSnippet: "Le plus grand aéroport d'Europe a été contraint de fermer vendredi, à cause d'une panne de courant électrique provoquée par un incendie. La police antiterroriste britannique a annoncé mener une enquête.",
+            guid: "https://www.francetvinfo.fr/monde/royaume-uni/fermeture-de-l-aeroport-de-londres-heathrow-ce-que-le-l-on-sait-de-l-incident-qui-perturbe-le-trafic-aerien-mondial_7143177.html",
+            isoDate: "2025-03-21T21:30:46.000Z"
+          }
+        ]
       }
     ];
-    this.filteredArticles = [...this.articles];
-    this.isLoading = false;
-  }
-  
-  getTimeAgo(dateString: string): string {
-    const publishedDate = new Date(dateString);
-    const now = new Date();
-    const diffInMinutes = Math.floor((now.getTime() - publishedDate.getTime()) / (1000 * 60));
     
-    if (diffInMinutes < 60) {
-      return `Il y a ${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''}`;
-    } else if (diffInMinutes < 1440) {
-      const hours = Math.floor(diffInMinutes / 60);
-      return `Il y a ${hours} heure${hours > 1 ? 's' : ''}`;
-    } else {
-      const days = Math.floor(diffInMinutes / 1440);
-      return `Il y a ${days} jour${days > 1 ? 's' : ''}`;
-    }
+    this.newsFeeds = mockNewsFeeds;
+    this.processNewsFeeds();
+    this.isLoading = false;
   }
 }

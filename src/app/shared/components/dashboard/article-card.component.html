@@ -1,0 +1,27 @@
+<div class="bg-white rounded-lg shadow overflow-hidden hover:shadow-md transition-shadow duration-300 article-card">
+    <div class="h-48 bg-gray-100 relative article-image">
+      <img [src]="getImageUrl()" [alt]="article.title" class="w-full h-full object-cover">
+      <div class="absolute top-2 left-2">
+        <span class="text-xs font-semibold px-2.5 py-0.5 rounded article-tag" [ngClass]="getCategoryClass()">{{ getCategoryName() }}</span>
+      </div>
+    </div>
+    <div class="p-4">
+      <div class="flex items-center mb-2">
+        <span class="text-xs text-gray-500">{{ getTimeAgo(article.isoDate) }}</span>
+        <span class="mx-2 text-gray-300">•</span>
+        <span class="text-xs text-gray-500">{{ sourceName }}</span>
+      </div>
+      <h3 class="text-lg font-semibold mb-2 hover:text-blue-600 line-clamp-3">
+        <a [href]="article.link" target="_blank" title="{{ article.title }}">{{ article.title }}</a>
+      </h3>
+      <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+        {{ article.contentSnippet }}
+      </p>
+      <a [href]="article.link" target="_blank" class="text-blue-600 hover:text-blue-700 inline-flex items-center text-sm font-medium">
+        Lire l'article complet
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+  </div>
