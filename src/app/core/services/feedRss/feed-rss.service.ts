@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { AuthService } from '../auth/auth.service';
 
 // Interface pour les données d'article
 export interface ArticleItem {
@@ -50,9 +51,9 @@ export interface NewsFeed {
   providedIn: 'root'
 })
 export class FeedRssService {
-  private apiUrl = `${environment.apiUrl}/feeds`;
+  private apiUrl = `${environment.apiUrl}/rssFeeds/`;
   
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
   
   // Récupérer tous les flux d'actualités
   getAllFeeds(): Observable<NewsFeed[]> {
@@ -62,6 +63,29 @@ export class FeedRssService {
           console.error('Erreur lors de la récupération des flux d\'actualités:', error);
           return throwError(() => new Error('Échec de récupération des flux d\'actualités'));
         })
+      );
+  }
+
+  getAllSubscribedArticles(): Observable<NewsFeed[]> {
+    const token = this.authService.getToken();
+    if (!token) {
+      return throwError(() => new Error('Token non disponible'));
+    }
+
+    //decode token
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    const user = JSON.parse(decodedPayload);
+    const userId = user.id;
+    console.log(userId);
+    const headers = { 'Authorization': `Bearer ${token}` };
+    
+    return this.http.get<NewsFeed[]>(`${this.apiUrl}/user/${userId}`, { headers })
+      .pipe(
+      catchError(error => {
+        console.error('Erreur lors de la récupération des articles abonnés:', error);
+        return throwError(() => new Error('Échec de récupération des articles abonnés'));
+      })
       );
   }
   
