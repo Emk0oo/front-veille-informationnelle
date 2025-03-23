@@ -23,7 +23,7 @@ import { ArticleItem } from '../../../core/services/feedRss/feed-rss.service';
       </div>
       <div class="p-4 flex flex-col flex-grow">
         <div class="flex items-center mb-2">
-          <span class="text-xs text-gray-500">{{ getTimeAgo(article.isoDate) }}</span>
+          <span class="text-xs text-gray-500">{{ getTimeAgo(article.isoDate || article.published_at) }}</span>
           <span class="mx-2 text-gray-300">•</span>
           <span class="text-xs text-gray-500">{{ sourceName }}</span>
         </div>
@@ -99,12 +99,18 @@ export class ArticleCardComponent {
   @Input() categoryId: number = 0;
   
   getImageUrl(): string {
-    // Essaie de récupérer l'URL de l'image depuis les différentes propriétés possibles
+    // Vérifier d'abord si l'article a une propriété imageUrl
+    if (this.article.imageUrl) {
+      return this.article.imageUrl;
+    }
+    
+    // Sinon, essayer de récupérer l'URL de l'image depuis les autres propriétés possibles
     if (this.article.mediaContent && this.article.mediaContent.length > 0) {
       return this.article.mediaContent[0].$.url;
     } else if (this.article.enclosure && this.article.enclosure.url) {
       return this.article.enclosure.url;
     }
+    
     return ''; // Pas d'image disponible
   }
   
@@ -136,8 +142,12 @@ export class ArticleCardComponent {
     return classes[this.categoryId] || 'tag-default';
   }
   
-  getTimeAgo(isoDate: string): string {
-    const publishedDate = new Date(isoDate);
+  getTimeAgo(dateString: string | undefined): string {
+    if (!dateString) {
+      return 'Date inconnue';
+    }
+    
+    const publishedDate = new Date(dateString);
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - publishedDate.getTime()) / (1000 * 60));
     

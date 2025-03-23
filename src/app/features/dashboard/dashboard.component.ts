@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -8,15 +8,19 @@ import { NavbarComponent } from '../../shared/components/dashboard/navbar/navbar
 import { SidebarComponent } from '../../shared/components/dashboard/sidebar.component';
 import { ArticleCardComponent } from '../../shared/components/dashboard/article-card.component';
 
-
 // Import des services
-import { FeedRssService, NewsFeed, ArticleItem } from '../../core/services/feedRss/feed-rss.service';
+import { FeedRssService, Article, ArticleItem } from '../../core/services/feedRss/feed-rss.service';
 import { AuthService } from '../../core/services/auth/auth.service';
 
 interface ProcessedArticle {
   article: ArticleItem;
   source: string;
   categoryId: number;
+}
+
+interface Source {
+  id: number;
+  title: string;
 }
 
 @Component({
@@ -28,7 +32,8 @@ interface ProcessedArticle {
     FormsModule,
     NavbarComponent,
     SidebarComponent,
-    ArticleCardComponent
+    ArticleCardComponent,
+    DatePipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -51,9 +56,12 @@ export class DashboardComponent implements OnInit {
   selectedSource: string = 'all';
   
   // Articles
-  newsFeeds: NewsFeed[] = [];
+  articles: Article[] = [];
   allArticles: ProcessedArticle[] = [];
   filteredArticles: ProcessedArticle[] = [];
+  
+  // Sources distinctes extraites des articles
+  sources: Source[] = [];
   
   constructor(
     private feedRssService: FeedRssService,
@@ -61,17 +69,27 @@ export class DashboardComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    this.loadSubscribedArticles();
+    // Initialiser la date courante à aujourd'hui
+    this.currentDate = new Date();
+    
+    // Charger les articles pour la date du jour
+    this.loadArticlesByCurrentDate();
   }
   
-  loadSubscribedArticles(): void {
+  loadArticlesByCurrentDate(): void {
     this.isLoading = true;
     this.errorMessage = null;
     
-    this.feedRssService.getAllSubscribedArticles().subscribe({
-      next: (feeds) => {
-        this.newsFeeds = feeds;
-        this.processNewsFeeds();
+    // Formater la date courante au format YYYY-MM-DD
+    const formattedDate = this.formatDateToYYYYMMDD(this.currentDate);
+    
+    this.feedRssService.getAllSubscribedArticlesByDate(formattedDate).subscribe({
+      next: (articles) => {
+        console.log('Articles chargés pour la date:', formattedDate);
+        console.log('Articles:', articles);
+        this.articles = articles;
+        this.extractSources();
+        this.processArticles();
         this.isLoading = false;
       },
       error: (error) => {
@@ -82,27 +100,74 @@ export class DashboardComponent implements OnInit {
     });
   }
   
-  processNewsFeeds(): void {
+  // Extraire les sources distinctes à partir des articles
+  extractSources(): void {
+    // Créer un ensemble pour stocker les IDs uniques et éviter les doublons
+    const uniqueSourceIds = new Set<number>();
+    const tempSources: Source[] = [];
+    
+    // Parcourir tous les articles et ajouter leurs sources s'ils ne sont pas déjà présents
+    this.articles.forEach(article => {
+      if (!uniqueSourceIds.has(article.feed_id)) {
+        uniqueSourceIds.add(article.feed_id);
+        
+        // Obtenir le titre de la source depuis le service ou utiliser un titre par défaut
+        const sourceTitle = this.feedRssService.getSourceNameById(article.feed_id);
+        
+        tempSources.push({
+          id: article.feed_id,
+          title: sourceTitle
+        });
+      }
+    });
+    
+    // Trier les sources par ID
+    this.sources = tempSources.sort((a, b) => a.id - b.id);
+  }
+  
+  navigateDay(direction: number): void {
+    const newDate = new Date(this.currentDate);
+    newDate.setDate(newDate.getDate() + direction);
+    this.currentDate = newDate;
+    
+    // Utiliser la fonction loadArticlesByCurrentDate pour éviter la duplication de code
+    this.loadArticlesByCurrentDate();
+  }
+  
+  processArticles(): void {
     this.allArticles = [];
     
-    // Traiter chaque flux d'actualités
-    this.newsFeeds.forEach(feed => {
-      // Utiliser le titre du flux comme nom de la source
-      const sourceName = feed.title;
-      
-      // Ajouter chaque article au tableau allArticles avec les métadonnées
-      feed.items.forEach(article => {
-        this.allArticles.push({
-          article,
-          source: sourceName,
-          categoryId: feed.category_id
-        });
+    // Vérification que articles est un tableau valide
+    if (!Array.isArray(this.articles) || this.articles.length === 0) {
+      this.newArticlesCount = 0;
+      this.filteredArticles = [];
+      return;
+    }
+    
+    // Traitement des articles retournés par l'API
+    this.articles.forEach(article => {
+      // Adapter chaque article au format ArticleItem pour la compatibilité avec ArticleCardComponent
+      this.allArticles.push({
+        article: {
+          title: article.title,
+          link: article.link,
+          content: article.content,
+          contentSnippet: article.content_snippet,
+          guid: article.guid,
+          isoDate: article.iso_date,
+          published_at: article.published_at,
+          imageUrl: article.image_url
+        },
+        source: this.feedRssService.getSourceNameById(article.feed_id),
+        categoryId: article.category_id || 0
       });
     });
     
     // Trier les articles par date (le plus récent d'abord)
     this.allArticles.sort((a, b) => {
-      return new Date(b.article.isoDate).getTime() - new Date(a.article.isoDate).getTime();
+      const dateA = new Date(a.article.isoDate || a.article.published_at || '');
+      const dateB = new Date(b.article.isoDate || b.article.published_at || '');
+      return dateB.getTime() - dateA.getTime();
     });
     
     // Mettre à jour le compteur d'articles
@@ -116,14 +181,13 @@ export class DashboardComponent implements OnInit {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
   
-  navigateDay(direction: number): void {
-    const newDate = new Date(this.currentDate);
-    newDate.setDate(newDate.getDate() + direction);
-    this.currentDate = newDate;
+  // Fonction utilitaire pour formater la date en YYYY-MM-DD
+  private formatDateToYYYYMMDD(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 car les mois commencent à 0
+    const day = String(date.getDate()).padStart(2, '0');
     
-    // Recharger les articles pour la nouvelle date
-    // Note: Cette fonctionnalité nécessiterait une API supportant la filtration par date
-    this.loadSubscribedArticles();
+    return `${year}-${month}-${day}`;
   }
   
   applyFilters(): void {
@@ -134,24 +198,21 @@ export class DashboardComponent implements OnInit {
       
       // Filtrer par thème (catégorie)
       if (this.selectedTheme !== 'all') {
-        matchesTheme = item.categoryId.toString() === this.selectedTheme;
+        matchesTheme = item.categoryId?.toString() === this.selectedTheme;
       }
       
       // Filtrer par source
       if (this.selectedSource !== 'all') {
-        // Comparer le nom de la source ou l'ID de la source selon ce qui est disponible
-        const feedId = this.getFeedIdByTitle(item.source);
-        matchesSource = feedId.toString() === this.selectedSource;
+        // Trouver la source correspondant à l'ID
+        const sourceArticle = this.articles.find(a => a.feed_id.toString() === this.selectedSource);
+        if (sourceArticle) {
+          // Vérifier si l'article provient de cette source
+          matchesSource = item.article.guid.includes(sourceArticle.guid.split('/')[2]);
+        }
       }
       
       return matchesTheme && matchesSource;
     });
-  }
-  
-  getFeedIdByTitle(title: string): number {
-    // Trouver le feed_id correspondant au titre
-    const feed = this.newsFeeds.find(f => f.title === title);
-    return feed ? feed.feed_id : 0;
   }
   
   loadMoreArticles(): void {
